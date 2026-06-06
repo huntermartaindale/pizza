@@ -247,8 +247,8 @@
 
   function renderBake(s, method) {
     var b = s.bake[method];
-    var f = Math.round(cToF(b.tempC));
-    $("bake").innerHTML = "<strong>Bake:</strong> ~" + f + " °F / " + b.tempC + " °C. " + b.note;
+    var c = Math.round(fToC(b.tempF));
+    $("bake").innerHTML = "<strong>Bake:</strong> ~" + b.tempF + " °F / " + c + " °C. " + b.note;
   }
 
   function renderNotes(s, method, r) {

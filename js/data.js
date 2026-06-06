@@ -16,7 +16,10 @@
    * hydration / salt / oil / sugar are baker's-% fractions (0.62 = 62%).
    * ball = default dough-ball weight in grams.
    * ferment = sensible default fermentation plan for the style.
-   * bake = { oven: {tempC, note}, home: {tempC, note} } guidance by method.
+   * bake = { oven: {tempF, note}, home: {tempF, note} } guidance by method.
+   * tempF is the primary value (rounded to a settable interval; home ovens capped
+   * at 550 F). Celsius is derived for display. Notes omit the temp (the bake line
+   * already shows it).
    * Ranges and conventions from the sourced research (see README "Sources").
    */
   var STYLES = {
@@ -27,8 +30,8 @@
       recommendedFlour: "00",
       ferment: { roomHours: 8, roomTempC: 20, coldHours: 0, coldTempC: 4 },
       bake: {
-        oven: { tempC: 450, note: "60-90 s in a wood/gas pizza oven." },
-        home: { tempC: 285, note: "Home ovens can't reach Neapolitan temps; use a steel/stone at max heat + broiler. Crust will differ." }
+        oven: { tempF: 850, note: "60-90 s in a wood/gas pizza oven." },
+        home: { tempF: 550, note: "Home ovens can't reach Neapolitan heat - use a stone or steel at max with the broiler; the crust will differ." }
       },
       needsHotOven: true,
       desc: "Purist dough: flour, water, salt, yeast only. Soft, blistered, very high heat."
@@ -40,8 +43,8 @@
       recommendedFlour: "bread",
       ferment: { roomHours: 2, roomTempC: 21, coldHours: 24, coldTempC: 4 },
       bake: {
-        oven: { tempC: 315, note: "5-7 min around 300-320 C." },
-        home: { tempC: 290, note: "Bake on a stone/steel at max (~285-290 C), 8-12 min." }
+        oven: { tempF: 600, note: "5-7 minutes; rotate once." },
+        home: { tempF: 550, note: "On a stone or steel near max, 8-12 minutes." }
       },
       needsHotOven: false,
       desc: "Foldable, chewy, light oil + sugar for browning. Cold-ferments well."
@@ -53,8 +56,8 @@
       recommendedFlour: "bread",
       ferment: { roomHours: 2, roomTempC: 21, coldHours: 24, coldTempC: 4 },
       bake: {
-        oven: { tempC: 260, note: "Parbake then finish; ~8-10 min total." },
-        home: { tempC: 245, note: "Oiled steel pan, 12-15 min at ~245 C (475 F)." }
+        oven: { tempF: 500, note: "Parbake, then finish; ~8-10 minutes total." },
+        home: { tempF: 475, note: "Oiled steel pan, 12-15 minutes." }
       },
       needsHotOven: false,
       desc: "Thick, airy, crispy cheese edge. High hydration; baked in an oiled pan."
@@ -66,8 +69,8 @@
       recommendedFlour: "bread",
       ferment: { roomHours: 2, roomTempC: 21, coldHours: 24, coldTempC: 4 },
       bake: {
-        oven: { tempC: 290, note: "Rolled thin and docked; 5-8 min." },
-        home: { tempC: 275, note: "Roll thin, dock, bake on a stone/steel ~275 C until crisp." }
+        oven: { tempF: 550, note: "Rolled thin and docked; 5-8 minutes." },
+        home: { tempF: 525, note: "Roll thin, dock, and bake on a stone or steel until crisp." }
       },
       needsHotOven: false,
       desc: "Cracker-thin Chicago tavern cut: very low hydration, high oil."
@@ -79,8 +82,8 @@
       recommendedFlour: "bread",
       ferment: { roomHours: 2, roomTempC: 21, coldHours: 24, coldTempC: 4 },
       bake: {
-        oven: { tempC: 230, note: "Parbake ~12 min then finish." },
-        home: { tempC: 220, note: "Oiled pan, ~430 F (220 C), 18-22 min." }
+        oven: { tempF: 450, note: "Parbake ~12 minutes, then finish." },
+        home: { tempF: 425, note: "Oiled pan, 18-22 minutes." }
       },
       needsHotOven: false,
       desc: "Thick square pan pizza; oily, open crumb, parbaked."
@@ -92,8 +95,8 @@
       recommendedFlour: "bread",
       ferment: { roomHours: 2, roomTempC: 21, coldHours: 24, coldTempC: 4 },
       bake: {
-        oven: { tempC: 260, note: "Oiled pan; ~10-12 min." },
-        home: { tempC: 250, note: "Oiled cast iron / pan at 475-500 F (245-260 C), 12-15 min." }
+        oven: { tempF: 500, note: "Oiled pan; ~10-12 minutes." },
+        home: { tempF: 475, note: "Oiled cast iron or pan, 12-15 minutes." }
       },
       needsHotOven: false,
       desc: "Forgiving high-hydration dough for a standard home oven and pan."
