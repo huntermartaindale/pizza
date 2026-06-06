@@ -250,7 +250,7 @@
         Math.round(r.percents.hydration * 100) + "% hydration. Lower the prefermented-flour % or raise the hydration.");
     }
     if (s.needsHotOven && method === "home") {
-      msgs.push("Neapolitan needs pizza-oven heat (430-480 °C). In a home oven the crust won't be the same - consider the New York or home-oven pan style, or use a steel under the broiler.");
+      msgs.push("Neapolitan needs pizza-oven heat. In a home oven the crust won't be the same - consider the New York or home-oven pan style, or use a steel under the broiler.");
     }
     var el = $("notes");
     if (msgs.length) {

@@ -27,7 +27,7 @@
       recommendedFlour: "00",
       ferment: { roomHours: 8, roomTempC: 20, coldHours: 0, coldTempC: 4 },
       bake: {
-        oven: { tempC: 450, note: "60-90 s in a wood/gas pizza oven (430-480 C)." },
+        oven: { tempC: 450, note: "60-90 s in a wood/gas pizza oven." },
         home: { tempC: 285, note: "Home ovens can't reach Neapolitan temps; use a steel/stone at max heat + broiler. Crust will differ." }
       },
       needsHotOven: true,
