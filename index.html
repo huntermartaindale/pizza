@@ -38,7 +38,7 @@
           <option value="home">Household oven</option>
         </select>
 
-        <label class="inline sweetener-toggle"><input type="checkbox" id="useSweetener" /> Add sweetener (helps browning)</label>
+        <label class="inline sweetener-toggle" id="sweetener-label"><input type="checkbox" id="useSweetener" /> Add sweetener (helps browning)</label>
         <div id="sweetener-type" class="sweetener-type hidden">
           <label class="inline"><input type="radio" name="sweetenerType" value="sugar" checked /> Sugar</label>
           <label class="inline"><input type="radio" name="sweetenerType" value="honey" /> Honey</label>
@@ -126,6 +126,7 @@
               </div>
             </div>
             <p class="hint">Ferment this first, then mix it into the final dough.</p>
+            <p id="preferment-time-note" class="hint"></p>
           </div>
 
           <div id="sweetener-where-wrap" class="hidden">

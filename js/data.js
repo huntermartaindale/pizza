@@ -22,7 +22,7 @@
   var STYLES = {
     neapolitan: {
       label: "Neapolitan",
-      hydration: 0.60, salt: 0.028, oil: 0.0, sugar: 0.01, sweetener: false,
+      hydration: 0.60, salt: 0.028, oil: 0.0, sugar: 0.01, sweetener: false, noSweetener: true,
       ball: 260,
       recommendedFlour: "00",
       ferment: { roomHours: 8, roomTempC: 20, coldHours: 0, coldTempC: 4 },
@@ -135,11 +135,13 @@
     none: { label: "None (straight dough)" },
     poolish: {
       label: "Poolish (liquid, 100%)", hydration: 1.0,
-      note: "Equal parts flour and water; pourable. Adds extensibility and a mild, nutty flavor."
+      note: "Equal parts flour and water; pourable. Adds extensibility and a mild, nutty flavor.",
+      timeNote: "Typical: 8-16 h at room temperature, until bubbly and just starting to dome on top."
     },
     biga: {
       label: "Biga (stiff, ~50%)", hydration: 0.5,
-      note: "Stiff and shaggy; tear into the final mix. Adds strength and a deeper aroma."
+      note: "Stiff and shaggy; tear into the final mix. Adds strength and a deeper aroma.",
+      timeNote: "Typical: 12-18 h, often a bit cooler (60-64 °F / 16-18 °C) for a stiff biga."
     }
   };
 

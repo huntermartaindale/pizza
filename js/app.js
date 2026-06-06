@@ -58,8 +58,7 @@
     $("salt").value = round1(s.salt * 100);
     $("oil").value = round1(s.oil * 100);
     $("sugar").value = round1(s.sugar * 100);
-    $("useSweetener").checked = !!s.sweetener;
-    updateSweetenerVisibility();
+    applySweetenerAvailability(s);
     $("ballWeight").value = s.ball;
     if (full) {
       $("flour").value = s.recommendedFlour;
@@ -345,6 +344,14 @@
     updateSweetenerWhereVisibility();
   }
 
+  // Neapolitan is the purist dough (flour/water/salt/yeast) - no sweetener offered.
+  function applySweetenerAvailability(s) {
+    var allowed = !s.noSweetener;
+    $("sweetener-label").classList.toggle("hidden", !allowed);
+    $("useSweetener").checked = allowed && !!s.sweetener;
+    updateSweetenerVisibility();
+  }
+
   function updatePrefermentVisibility() {
     var key = $("preferment").value;
     var on = key !== "none";
@@ -352,6 +359,8 @@
     $("preferment-desc").textContent = on
       ? D.PREFERMENTS[key].note
       : "Optional: build flavor and strength with a make-ahead poolish or biga.";
+    $("preferment-time-note").textContent = (on && D.PREFERMENTS[key].timeNote)
+      ? D.PREFERMENTS[key].timeNote : "";
     updateSweetenerWhereVisibility();
   }
 
