@@ -105,14 +105,18 @@
 
   /*
    * FLOUR TYPES
-   * cupG = grams per US cup (King Arthur fluff-and-sprinkle values). Used only
-   * for the imperial/volume fallback. note = guidance shown in the UI.
+   * cupG = grams per US cup (King Arthur fluff-and-sprinkle values), used for the
+   * imperial/volume fallback. note = guidance shown in the UI.
+   * hydrationOffset = percentage points added to the style's hydration to account
+   * for this flour's water absorption, RELATIVE to the style's recommended flour
+   * (so the recommended flour leaves the style default unchanged). Bread is the
+   * reference; only differences big enough to matter are non-zero.
    */
   var FLOURS = {
-    "00": { label: "00 (Italian)", cupG: 106, note: "Finely milled; best for high-heat Neapolitan." },
-    bread: { label: "Bread flour", cupG: 120, note: "High protein; chewy NY / pan / Detroit." },
-    ap: { label: "All-purpose", cupG: 120, note: "Versatile; fine for most home styles." },
-    ww: { label: "Whole wheat", cupG: 113, note: "Often blended in; absorbs more water." }
+    "00": { label: "00 (Italian)", cupG: 106, hydrationOffset: 0, note: "Finely milled; best for high-heat Neapolitan." },
+    bread: { label: "Bread flour", cupG: 120, hydrationOffset: 0, note: "High protein; chewy NY / pan / Detroit." },
+    ap: { label: "All-purpose", cupG: 120, hydrationOffset: -2, note: "Slightly lower absorption; hydration eased ~2%." },
+    ww: { label: "Whole wheat", cupG: 113, hydrationOffset: 6, note: "Bran absorbs more water; hydration raised ~6%." }
   };
 
   /*

@@ -51,17 +51,26 @@
 
   // Apply a style's defaults. `full` also resets flour + fermentation fields
   // (used on style change / first load); percentage-only reset omits them.
+  // Style hydration adjusted for the chosen flour's absorption, relative to the
+  // style's recommended flour (recommended flour => no change).
+  function effectiveHydration(styleKey, flourType) {
+    var s = D.STYLES[styleKey];
+    var fOff = D.FLOURS[flourType].hydrationOffset || 0;
+    var recOff = D.FLOURS[s.recommendedFlour].hydrationOffset || 0;
+    return s.hydration * 100 + (fOff - recOff);
+  }
+
   function applyStyle(key, full) {
     var s = D.STYLES[key];
     $("style-desc").textContent = s.desc;
-    $("hydration").value = round1(s.hydration * 100);
+    if (full) $("flour").value = s.recommendedFlour;
+    $("hydration").value = round1(effectiveHydration(key, $("flour").value));
     $("salt").value = round1(s.salt * 100);
     $("oil").value = round1(s.oil * 100);
     $("sugar").value = round1(s.sugar * 100);
     applySweetenerAvailability(s);
     $("ballWeight").value = s.ball;
     if (full) {
-      $("flour").value = s.recommendedFlour;
       $("roomHours").value = s.ferment.roomHours;
       $("coldHours").value = s.ferment.coldHours;
       setTempInput($("roomTempC"), s.ferment.roomTempC);
@@ -281,6 +290,12 @@
     // style change resets presets first
     $("style").addEventListener("change", function () {
       applyStyle($("style").value, true);
+      recompute();
+    });
+
+    // flour change re-sets the suggested hydration for the new flour
+    $("flour").addEventListener("change", function () {
+      $("hydration").value = round1(effectiveHydration($("style").value, this.value));
       recompute();
     });
 

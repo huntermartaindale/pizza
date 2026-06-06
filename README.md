@@ -109,8 +109,14 @@ styles it is off but one click away. When enabled, choose **Sugar or Honey** -
 they are used at the same small baker's percentage; honey just adds a trace of
 moisture and a milder sweetness. Neapolitan stays a purist (no oil or sweetener).
 When a preferment is used, you can choose to put the sweetener in the preferment
-(the classic honey-in-the-poolish move) or in the final dough. Sources for the
-ranges are below.
+(the classic honey-in-the-poolish move) or in the final dough.
+
+Flour type actively adjusts the suggested **hydration** for water absorption,
+relative to each style's recommended flour: whole wheat raises it ~6% (the bran
+soaks up more water) and all-purpose eases it ~2% (lower protein); 00 and bread
+are the reference and leave the style default unchanged. Flour type also drives
+the cups-of-flour volume estimate. It does not change the salt, oil, sweetener,
+or yeast ratios. Sources for the ranges are below.
 
 ## Units
 
