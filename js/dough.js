@@ -127,7 +127,8 @@
    *   hydration, salt, oil, sugar,          // fractions, already resolved from UI
    *   roomHours, roomTempC, coldHours, coldTempC,
    *   prefermentType ('none'|'poolish'|'biga'),
-   *   prefFlourFraction, prefHours, prefTempC   // only used when a preferment is set
+   *   prefFlourFraction, prefHours, prefTempC,  // only used when a preferment is set
+   *   sweetenerInPreferment                     // put the sweetener in the preferment vs final
    * }
    *
    * Flour is backed out of the total dough weight so the balls come out at the
@@ -204,6 +205,11 @@
       var waterShortfall = finalWater < 0;
       if (waterShortfall) finalWater = 0;
 
+      // The sweetener (a small flour-weight amount) goes in one stage or the
+      // other; placing it doesn't affect the flour/water split.
+      var sugarGrams = flour * sugar;
+      var inPref = !!inp.sweetenerInPreferment;
+
       out.preferment = {
         type: inp.prefermentType,
         flourFraction: pfFrac,
@@ -213,7 +219,8 @@
         hasYeast: prefIDY != null,
         flour: pfFlour,
         water: pfWater,
-        yeast: convertYeast(pfFlour * prefIDYf, inp.yeastType)
+        yeast: convertYeast(pfFlour * prefIDYf, inp.yeastType),
+        sugar: inPref ? sugarGrams : 0
       };
       out.finalDough = {
         idyPct: finalIDYf,
@@ -223,7 +230,7 @@
         salt: flour * salt,
         yeast: convertYeast(finalFlour * finalIDYf, inp.yeastType),
         oil: flour * oil,
-        sugar: flour * sugar
+        sugar: inPref ? 0 : sugarGrams
       };
       out.waterShortfall = waterShortfall;
     }

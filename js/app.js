@@ -104,7 +104,8 @@
       prefermentType: $("preferment").value,
       prefFlourFraction: num("prefFlourPct", 30) / 100,
       prefHours: num("prefHours", 12),
-      prefTempC: readTempC($("prefTempC"), 20)
+      prefTempC: readTempC($("prefTempC"), 20),
+      sweetenerInPreferment: useSweet && $("sweetenerWhere").value === "preferment"
     };
 
     var r = DG.computeRecipe(inp);
@@ -222,6 +223,9 @@
       { key: "water", name: "Water", grams: p.water },
       { key: "yeast", name: "Yeast", pct: p.hasYeast ? pc(p.idyPct) + " IDY" : "", grams: p.hasYeast ? p.yeast : null }
     ];
+    if (p.sugar && p.sugar >= 0.05) {
+      pRows.push({ key: "sugar", name: sweetenerLabel, pct: pc(r.percents.sugar), grams: p.sugar });
+    }
     var pSub = "Mix, then ferment ~" + round1(p.hours) + " h at " + fmtTempBoth(p.tempC) +
       " until bubbly. (" + Math.round(p.flourFraction * 100) + "% of the flour.)";
 
@@ -338,6 +342,7 @@
     var on = $("useSweetener").checked;
     $("sweetener-type").classList.toggle("hidden", !on);
     $("sugar").disabled = !on; // the % field only matters when sweetener is on
+    updateSweetenerWhereVisibility();
   }
 
   function updatePrefermentVisibility() {
@@ -347,6 +352,14 @@
     $("preferment-desc").textContent = on
       ? D.PREFERMENTS[key].note
       : "Optional: build flavor and strength with a make-ahead poolish or biga.";
+    updateSweetenerWhereVisibility();
+  }
+
+  // The "where does the sweetener go" picker only matters when there is both a
+  // preferment and a sweetener.
+  function updateSweetenerWhereVisibility() {
+    var show = $("preferment").value !== "none" && $("useSweetener").checked;
+    $("sweetener-where-wrap").classList.toggle("hidden", !show);
   }
 
   // ---- init ------------------------------------------------------------------

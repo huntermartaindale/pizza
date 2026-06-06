@@ -108,7 +108,9 @@ traditional. A sweetener (mostly a browning aid) is less universal, so the
 styles it is off but one click away. When enabled, choose **Sugar or Honey** -
 they are used at the same small baker's percentage; honey just adds a trace of
 moisture and a milder sweetness. Neapolitan stays a purist (no oil or sweetener).
-Sources for the ranges are below.
+When a preferment is used, you can choose to put the sweetener in the preferment
+(the classic honey-in-the-poolish move) or in the final dough. Sources for the
+ranges are below.
 
 ## Units
 
