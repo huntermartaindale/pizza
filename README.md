@@ -99,10 +99,16 @@ whole dough, you can dial the final-dough yeast down if your dough over-proofs.
 ## Styles and ingredients
 
 Each style auto-fills traditional baker's percentages (hydration, salt, oil,
-sugar), a default ball weight, a recommended flour, and a fermentation plan. Every
-value is editable under **Customize percentages**. Neapolitan is the purist (no
-oil or sugar); New York, Detroit, tavern, Sicilian, and home-oven pan add a little
-oil (and a little sugar for browning). Sources for the ranges are below.
+sweetener), a default ball weight, a recommended flour, and a fermentation plan.
+Every value is editable under **Customize percentages**.
+
+Oil is common across the non-Neapolitan styles, so it is on by default where
+traditional. A sweetener (mostly a browning aid) is less universal, so the
+**Add sweetener** checkbox is on by default only for **New York**; for the other
+styles it is off but one click away. When enabled, choose **Sugar or Honey** -
+they are used at the same small baker's percentage; honey just adds a trace of
+moisture and a milder sweetness. Neapolitan stays a purist (no oil or sweetener).
+Sources for the ranges are below.
 
 ## Units
 

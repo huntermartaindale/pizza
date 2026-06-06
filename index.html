@@ -37,6 +37,12 @@
           <option value="oven">Pizza oven (high heat)</option>
           <option value="home">Household oven</option>
         </select>
+
+        <label class="inline sweetener-toggle"><input type="checkbox" id="useSweetener" /> Add sweetener (helps browning)</label>
+        <div id="sweetener-type" class="sweetener-type hidden">
+          <label class="inline"><input type="radio" name="sweetenerType" value="sugar" checked /> Sugar</label>
+          <label class="inline"><input type="radio" name="sweetenerType" value="honey" /> Honey</label>
+        </div>
       </fieldset>
 
       <fieldset class="group">
@@ -148,7 +154,7 @@
               <input id="oil" type="number" min="0" max="15" step="0.5" inputmode="decimal" />
             </div>
             <div class="col">
-              <label for="sugar">Sugar %</label>
+              <label for="sugar">Sweetener %</label>
               <input id="sugar" type="number" min="0" max="10" step="0.5" inputmode="decimal" />
             </div>
           </div>

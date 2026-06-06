@@ -85,6 +85,9 @@ select:focus, input:focus, button:focus-visible {
 
 .tempunit-row { align-items: center; gap: 1rem; margin-top: 0.7rem; flex-wrap: wrap; }
 
+.sweetener-toggle { margin-top: 0.9rem; font-weight: 600; }
+.sweetener-type { display: flex; gap: 1.2rem; margin: 0.4rem 0 0 1.7rem; }
+
 .hint { margin: 0.3rem 0 0; color: var(--muted); font-size: 0.82rem; }
 
 .linkbtn {

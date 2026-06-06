@@ -9,6 +9,7 @@
   var $ = function (id) { return document.getElementById(id); };
 
   var tempUnit = "F"; // current display unit for the temperature inputs (US default)
+  var sweetenerLabel = "Sugar"; // "Sugar" or "Honey", set in recompute
 
   // ---- small helpers ---------------------------------------------------------
 
@@ -57,6 +58,8 @@
     $("salt").value = round1(s.salt * 100);
     $("oil").value = round1(s.oil * 100);
     $("sugar").value = round1(s.sugar * 100);
+    $("useSweetener").checked = !!s.sweetener;
+    updateSweetenerVisibility();
     $("ballWeight").value = s.ball;
     if (full) {
       $("flour").value = s.recommendedFlour;
@@ -79,6 +82,10 @@
 
     $("flour-hint").textContent = D.FLOURS[flourType].note;
 
+    var useSweet = $("useSweetener").checked;
+    var stEl = document.querySelector('input[name="sweetenerType"]:checked');
+    sweetenerLabel = (stEl && stEl.value === "honey") ? "Honey" : "Sugar";
+
     var inp = {
       styleKey: styleKey,
       flourType: flourType,
@@ -89,7 +96,7 @@
       hydration: num("hydration", 60) / 100,
       salt: num("salt", 2.5) / 100,
       oil: num("oil", 0) / 100,
-      sugar: num("sugar", 0) / 100,
+      sugar: useSweet ? num("sugar", 0) / 100 : 0,
       roomHours: num("roomHours", 0),
       roomTempC: readTempC($("roomTempC"), 21),
       coldHours: num("coldHours", 0),
@@ -132,8 +139,9 @@
 
       var tr = document.createElement("tr");
 
+      var displayName = row.key === "sugar" ? sweetenerLabel : row.name;
       var tdName = document.createElement("td");
-      tdName.innerHTML = '<span class="ingredient-name">' + row.name + '</span> ' +
+      tdName.innerHTML = '<span class="ingredient-name">' + displayName + '</span> ' +
         '<span class="ingredient-pct">' + row.pct(r) + "</span>";
       tr.appendChild(tdName);
 
@@ -223,7 +231,7 @@
       { key: "salt", name: "Salt", pct: pc(r.percents.salt), grams: f.salt },
       { key: "yeast", name: "Yeast", pct: f.hasYeast ? pc(f.idyPct) + " IDY" : "", grams: f.hasYeast ? f.yeast : null },
       { key: "oil", name: "Oil", pct: pc(r.percents.oil), grams: f.oil },
-      { key: "sugar", name: "Sugar", pct: pc(r.percents.sugar), grams: f.sugar }
+      { key: "sugar", name: sweetenerLabel, pct: pc(r.percents.sugar), grams: f.sugar }
     ].filter(function (row) {
       return !((row.key === "oil" || row.key === "sugar") && (!row.grams || row.grams < 0.05));
     });
@@ -289,6 +297,12 @@
       });
     });
 
+    // sweetener checkbox: reveal the sugar/honey choice
+    $("useSweetener").addEventListener("change", function () {
+      updateSweetenerVisibility();
+      recompute();
+    });
+
     // preferment selection: show/hide its options + flip the results layout
     $("preferment").addEventListener("change", function () {
       updatePrefermentVisibility();
@@ -318,6 +332,12 @@
       applyStyle($("style").value, false);
       recompute();
     });
+  }
+
+  function updateSweetenerVisibility() {
+    var on = $("useSweetener").checked;
+    $("sweetener-type").classList.toggle("hidden", !on);
+    $("sugar").disabled = !on; // the % field only matters when sweetener is on
   }
 
   function updatePrefermentVisibility() {

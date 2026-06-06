@@ -22,7 +22,7 @@
   var STYLES = {
     neapolitan: {
       label: "Neapolitan",
-      hydration: 0.60, salt: 0.028, oil: 0.0, sugar: 0.0,
+      hydration: 0.60, salt: 0.028, oil: 0.0, sugar: 0.01, sweetener: false,
       ball: 260,
       recommendedFlour: "00",
       ferment: { roomHours: 8, roomTempC: 20, coldHours: 0, coldTempC: 4 },
@@ -35,7 +35,7 @@
     },
     newyork: {
       label: "New York",
-      hydration: 0.62, salt: 0.022, oil: 0.02, sugar: 0.015,
+      hydration: 0.62, salt: 0.022, oil: 0.02, sugar: 0.015, sweetener: true,
       ball: 280,
       recommendedFlour: "bread",
       ferment: { roomHours: 2, roomTempC: 21, coldHours: 24, coldTempC: 4 },
@@ -48,7 +48,7 @@
     },
     detroit: {
       label: "Detroit (pan)",
-      hydration: 0.72, salt: 0.02, oil: 0.02, sugar: 0.015,
+      hydration: 0.72, salt: 0.02, oil: 0.02, sugar: 0.01, sweetener: false,
       ball: 540,
       recommendedFlour: "bread",
       ferment: { roomHours: 2, roomTempC: 21, coldHours: 24, coldTempC: 4 },
@@ -61,7 +61,7 @@
     },
     tavern: {
       label: "Tavern / thin",
-      hydration: 0.52, salt: 0.01, oil: 0.08, sugar: 0.01,
+      hydration: 0.52, salt: 0.01, oil: 0.08, sugar: 0.01, sweetener: false,
       ball: 300,
       recommendedFlour: "bread",
       ferment: { roomHours: 2, roomTempC: 21, coldHours: 24, coldTempC: 4 },
@@ -74,7 +74,7 @@
     },
     sicilian: {
       label: "Sicilian (pan)",
-      hydration: 0.72, salt: 0.02, oil: 0.04, sugar: 0.01,
+      hydration: 0.72, salt: 0.02, oil: 0.04, sugar: 0.01, sweetener: false,
       ball: 380,
       recommendedFlour: "bread",
       ferment: { roomHours: 2, roomTempC: 21, coldHours: 24, coldTempC: 4 },
@@ -87,7 +87,7 @@
     },
     pan: {
       label: "Home-oven pan",
-      hydration: 0.75, salt: 0.02, oil: 0.02, sugar: 0.01,
+      hydration: 0.75, salt: 0.02, oil: 0.02, sugar: 0.01, sweetener: false,
       ball: 350,
       recommendedFlour: "bread",
       ferment: { roomHours: 2, roomTempC: 21, coldHours: 24, coldTempC: 4 },
