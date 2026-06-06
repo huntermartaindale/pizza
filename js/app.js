@@ -8,7 +8,7 @@
   var DG = window.DOUGH;
   var $ = function (id) { return document.getElementById(id); };
 
-  var tempUnit = "C"; // current display unit for the two temperature inputs
+  var tempUnit = "F"; // current display unit for the temperature inputs (US default)
 
   // ---- small helpers ---------------------------------------------------------
 
@@ -181,7 +181,7 @@
     }
   }
 
-  function fmtTempBoth(c) { return Math.round(c) + " °C / " + Math.round(cToF(c)) + " °F"; }
+  function fmtTempBoth(c) { return Math.round(cToF(c)) + " °F / " + Math.round(c) + " °C"; }
 
   // Build one labeled stage table from a list of {key, name, pct, grams} rows.
   // grams === null renders a "-" (used for yeast when there is no ferment time).
@@ -237,7 +237,7 @@
   function renderBake(s, method) {
     var b = s.bake[method];
     var f = Math.round(cToF(b.tempC));
-    $("bake").innerHTML = "<strong>Bake:</strong> ~" + b.tempC + " °C / " + f + " °F. " + b.note;
+    $("bake").innerHTML = "<strong>Bake:</strong> ~" + f + " °F / " + b.tempC + " °C. " + b.note;
   }
 
   function renderNotes(s, method, r) {
@@ -347,6 +347,9 @@
     $("yeast").value = "idy";
     $("ballCount").value = 2;
     $("caveat").textContent = D.CONVERSIONS.flourCaveat;
+
+    // make the temperature unit labels match the default unit
+    document.querySelectorAll(".unit-label").forEach(function (sp) { sp.textContent = "°" + tempUnit; });
 
     // preferment defaults (independent of style)
     $("preferment").value = "none";

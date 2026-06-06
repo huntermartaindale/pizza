@@ -106,8 +106,8 @@ oil (and a little sugar for browning). Sources for the ranges are below.
 
 ## Units
 
-Grams are the default and most accurate. Toggle **Show cups / spoons** for a
-volume fallback. Flour cup-weight genuinely varies (~120-140 g/cup by method), so
+Grams are the default and most accurate. Temperatures default to **°F** (toggle
+to °C). Toggle **Show cups / spoons** for a volume fallback. Flour cup-weight genuinely varies (~120-140 g/cup by method), so
 volume measures are approximate - a kitchen scale is strongly recommended,
 especially for the tiny yeast amounts. Salt spoon amounts depend on crystal type
 (table vs Diamond Crystal vs Morton), so pick your salt when using volumes.
