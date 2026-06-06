@@ -97,6 +97,34 @@
       </fieldset>
 
       <fieldset class="group">
+        <legend>Preferment (optional)</legend>
+        <label for="preferment">Make-ahead culture</label>
+        <select id="preferment" name="preferment"></select>
+        <p id="preferment-desc" class="hint"></p>
+
+        <div id="preferment-opts" class="hidden">
+          <label for="prefFlourPct">Prefermented flour %</label>
+          <input id="prefFlourPct" type="number" min="5" max="80" step="5" inputmode="numeric" />
+          <p class="hint">Share of the total flour that goes into the preferment (20-40% is typical).</p>
+
+          <div class="stage">
+            <h3>Preferment rise</h3>
+            <div class="row">
+              <div class="col">
+                <label for="prefHours">Hours</label>
+                <input id="prefHours" type="number" min="1" max="48" step="1" inputmode="numeric" />
+              </div>
+              <div class="col">
+                <label for="prefTempC">Temp <span class="unit-label">°C</span></label>
+                <input id="prefTempC" type="number" step="1" inputmode="numeric" />
+              </div>
+            </div>
+            <p class="hint">Ferment this first, then mix it into the final dough.</p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="group">
         <legend>
           <button type="button" id="customize-toggle" class="linkbtn" aria-expanded="false">
             Customize percentages ▸
@@ -144,6 +172,8 @@
         <label for="saltType">Salt type (for spoon amounts)</label>
         <select id="saltType"></select>
       </div>
+
+      <div id="preferment-output" class="hidden"></div>
 
       <table class="recipe" id="recipe-table">
         <thead>

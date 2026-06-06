@@ -117,6 +117,12 @@ table.recipe tfoot th, table.recipe tfoot td { font-weight: 700; border-top: 2px
 .ingredient-name { font-weight: 600; }
 .ingredient-pct { color: var(--muted); font-size: 0.78rem; font-weight: 400; }
 
+/* preferment two-table layout */
+#preferment-output .stage-title { margin: 1rem 0 0.15rem; font-size: 1rem; color: var(--crust-dark); }
+#preferment-output .stage-title:first-child { margin-top: 0.6rem; }
+.stage-sub { margin: 0 0 0.2rem; color: var(--muted); font-size: 0.82rem; }
+.stage-table { margin-top: 0.3rem; }
+
 .bake {
   margin-top: 0.9rem; padding: 0.7rem 0.8rem;
   background: #eef7ee; border: 1px solid #cfe6cf; border-radius: 10px;

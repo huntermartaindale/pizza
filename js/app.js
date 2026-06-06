@@ -93,11 +93,15 @@
       roomHours: num("roomHours", 0),
       roomTempC: readTempC($("roomTempC"), 21),
       coldHours: num("coldHours", 0),
-      coldTempC: readTempC($("coldTempC"), 4)
+      coldTempC: readTempC($("coldTempC"), 4),
+      prefermentType: $("preferment").value,
+      prefFlourFraction: num("prefFlourPct", 30) / 100,
+      prefHours: num("prefHours", 12),
+      prefTempC: readTempC($("prefTempC"), 20)
     };
 
     var r = DG.computeRecipe(inp);
-    renderTable(r, flourType);
+    renderResults(r, flourType);
     renderBake(s, method);
     renderNotes(s, method, r);
     $("yeast-note").textContent = "Yeast: " + D.YEAST[inp.yeastType].note;
@@ -163,6 +167,73 @@
     return fmtGrams(grams) + " g";
   }
 
+  // Choose single-table (straight dough) or two-table (preferment) layout.
+  function renderResults(r, flourType) {
+    if (r.usesPreferment) {
+      $("recipe-table").classList.add("hidden");
+      var out = $("preferment-output");
+      out.classList.remove("hidden");
+      out.innerHTML = buildPrefermentHTML(r, flourType);
+    } else {
+      $("preferment-output").classList.add("hidden");
+      $("recipe-table").classList.remove("hidden");
+      renderTable(r, flourType);
+    }
+  }
+
+  function fmtTempBoth(c) { return Math.round(c) + " °C / " + Math.round(cToF(c)) + " °F"; }
+
+  // Build one labeled stage table from a list of {key, name, pct, grams} rows.
+  // grams === null renders a "-" (used for yeast when there is no ferment time).
+  function stageTable(title, subtitle, rows, flourType, saltType, showImp) {
+    var html = '<h3 class="stage-title">' + title + "</h3>";
+    if (subtitle) html += '<p class="stage-sub">' + subtitle + "</p>";
+    var impHead = showImp ? '<th class="num">Volume</th>' : "";
+    var bodyRows = rows.map(function (row) {
+      var amt = row.grams == null ? "-" : fmtGrams(row.grams) + " g";
+      var impCell = "";
+      if (showImp) {
+        var v = row.grams == null ? "-" : DG.gramsToImperial(row.grams, row.key, { flourType: flourType, saltType: saltType });
+        impCell = '<td class="num">' + v + "</td>";
+      }
+      var pct = row.pct ? ' <span class="ingredient-pct">' + row.pct + "</span>" : "";
+      return '<tr><td><span class="ingredient-name">' + row.name + "</span>" + pct +
+        '</td><td class="num">' + amt + "</td>" + impCell + "</tr>";
+    }).join("");
+    return html + '<table class="recipe stage-table"><thead><tr><th>Ingredient</th>' +
+      '<th class="num">Amount</th>' + impHead + "</tr></thead><tbody>" + bodyRows + "</tbody></table>";
+  }
+
+  function buildPrefermentHTML(r, flourType) {
+    var showImp = $("showImperial").checked;
+    var saltType = $("saltType").value || "fine";
+    var p = r.preferment, f = r.finalDough;
+
+    var pRows = [
+      { key: "flour", name: "Flour", grams: p.flour },
+      { key: "water", name: "Water", grams: p.water },
+      { key: "yeast", name: "Yeast", pct: p.hasYeast ? pc(p.idyPct) + " IDY" : "", grams: p.hasYeast ? p.yeast : null }
+    ];
+    var pSub = "Mix, then ferment ~" + round1(p.hours) + " h at " + fmtTempBoth(p.tempC) +
+      " until bubbly. (" + Math.round(p.flourFraction * 100) + "% of the flour.)";
+
+    var fRows = [
+      { key: "flour", name: "Flour", grams: f.flour },
+      { key: "water", name: "Water", grams: f.water },
+      { key: "salt", name: "Salt", pct: pc(r.percents.salt), grams: f.salt },
+      { key: "yeast", name: "Yeast", pct: f.hasYeast ? pc(f.idyPct) + " IDY" : "", grams: f.hasYeast ? f.yeast : null },
+      { key: "oil", name: "Oil", pct: pc(r.percents.oil), grams: f.oil },
+      { key: "sugar", name: "Sugar", pct: pc(r.percents.sugar), grams: f.sugar }
+    ].filter(function (row) {
+      return !((row.key === "oil" || row.key === "sugar") && (!row.grams || row.grams < 0.05));
+    });
+    var fSub = "Combine with the preferment and knead, then ferment per your room/fridge plan and divide into " +
+      r.ballCount + " balls of " + fmtGrams(r.ballWeight) + " g.";
+
+    return stageTable("① Preferment - " + D.PREFERMENTS[p.type].label, pSub, pRows, flourType, saltType, showImp) +
+      stageTable("② Final dough", fSub, fRows, flourType, saltType, showImp);
+  }
+
   function renderBake(s, method) {
     var b = s.bake[method];
     var f = Math.round(cToF(b.tempC));
@@ -173,6 +244,10 @@
     var msgs = [];
     if (!r.hasYeast) {
       msgs.push("Enter a room or cold fermentation time to get a yeast amount.");
+    }
+    if (r.waterShortfall) {
+      msgs.push("This poolish needs more water than the recipe allows at " +
+        Math.round(r.percents.hydration * 100) + "% hydration. Lower the prefermented-flour % or raise the hydration.");
     }
     if (s.needsHotOven && method === "home") {
       msgs.push("Neapolitan needs pizza-oven heat (430-480 °C). In a home oven the crust won't be the same - consider the New York or home-oven pan style, or use a steel under the broiler.");
@@ -203,7 +278,7 @@
       radio.addEventListener("change", function () {
         var next = this.value;
         if (next === tempUnit) return;
-        ["roomTempC", "coldTempC"].forEach(function (id) {
+        ["roomTempC", "coldTempC", "prefTempC"].forEach(function (id) {
           var el = $(id);
           var v = parseFloat(el.value);
           if (!isNaN(v)) el.value = Math.round(next === "F" ? cToF(v) : fToC(v));
@@ -212,6 +287,12 @@
         document.querySelectorAll(".unit-label").forEach(function (sp) { sp.textContent = "°" + next; });
         recompute();
       });
+    });
+
+    // preferment selection: show/hide its options + flip the results layout
+    $("preferment").addEventListener("change", function () {
+      updatePrefermentVisibility();
+      recompute();
     });
 
     // imperial toggle: show columns + salt picker + caveat
@@ -239,12 +320,22 @@
     });
   }
 
+  function updatePrefermentVisibility() {
+    var key = $("preferment").value;
+    var on = key !== "none";
+    $("preferment-opts").classList.toggle("hidden", !on);
+    $("preferment-desc").textContent = on
+      ? D.PREFERMENTS[key].note
+      : "Optional: build flavor and strength with a make-ahead poolish or biga.";
+  }
+
   // ---- init ------------------------------------------------------------------
 
   function init() {
     fillSelect($("style"), D.STYLES);
     fillSelect($("flour"), D.FLOURS);
     fillSelect($("yeast"), D.YEAST);
+    fillSelect($("preferment"), D.PREFERMENTS);
 
     var st = $("saltType");
     Object.keys(D.CONVERSIONS.salt).forEach(function (k) {
@@ -256,6 +347,13 @@
     $("yeast").value = "idy";
     $("ballCount").value = 2;
     $("caveat").textContent = D.CONVERSIONS.flourCaveat;
+
+    // preferment defaults (independent of style)
+    $("preferment").value = "none";
+    $("prefFlourPct").value = Math.round(D.PREFERMENT_DEFAULTS.flourPct * 100);
+    $("prefHours").value = D.PREFERMENT_DEFAULTS.hours;
+    setTempInput($("prefTempC"), D.PREFERMENT_DEFAULTS.tempC);
+    updatePrefermentVisibility();
 
     applyStyle($("style").value, true);
     bindEvents();

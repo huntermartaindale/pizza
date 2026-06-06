@@ -76,6 +76,26 @@ guarantee - real dough also depends on flour, salt, and your kitchen.
 - Neapolitan, 260 g x 2, 8 h at 20 C -> flour ~318 g, water ~191 g (60%),
   salt ~8.9 g (2.8%), yeast ~1.6 g IDY (0.5%).
 
+## Preferments (poolish / biga)
+
+Optionally build flavor and strength with a make-ahead culture:
+
+- **Poolish** - liquid, 100% hydration (equal flour and water).
+- **Biga** - stiff, ~50% hydration.
+
+You choose the preferment type, what share of the **total flour** goes into it
+(20-40% is typical), and its own ferment time and temperature. The calculator
+then splits the recipe into two stages and sizes the yeast for each stage from
+**its own** fermentation using the same model: the preferment gets a small amount
+for its long slow rise, and the final dough gets yeast for the room/fridge plan.
+Salt, oil, and sugar always go in the final mix (salt would slow the preferment).
+
+The total flour and water are conserved across the two stages. Because a poolish
+is 100% hydration, prefermenting more flour than the recipe's hydration allows
+would leave the final dough with no water - the app warns and tells you to lower
+the prefermented-flour % or raise hydration. Since the preferment also leavens the
+whole dough, you can dial the final-dough yeast down if your dough over-proofs.
+
 ## Styles and ingredients
 
 Each style auto-fills traditional baker's percentages (hydration, salt, oil,

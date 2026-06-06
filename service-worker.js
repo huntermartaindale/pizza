@@ -5,7 +5,7 @@
  * when offline. All paths are relative so it works under a project subpath
  * (e.g. https://user.github.io/pizza/).
  */
-var CACHE = "pizza-dough-v1";
+var CACHE = "pizza-dough-v2";
 var SHELL = [
   "./",
   "./index.html",

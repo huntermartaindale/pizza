@@ -125,10 +125,15 @@
    *   styleKey, flourType, yeastType, method ('oven'|'home'),
    *   ballWeight, ballCount,
    *   hydration, salt, oil, sugar,          // fractions, already resolved from UI
-   *   roomHours, roomTempC, coldHours, coldTempC
+   *   roomHours, roomTempC, coldHours, coldTempC,
+   *   prefermentType ('none'|'poolish'|'biga'),
+   *   prefFlourFraction, prefHours, prefTempC   // only used when a preferment is set
    * }
-   * Yeast % comes from the model. Flour is backed out of total dough weight so
-   * the balls come out at the requested size.
+   *
+   * Flour is backed out of the total dough weight so the balls come out at the
+   * requested size. With a preferment, part of the flour and water (and a little
+   * yeast) move into a make-ahead culture; each stage's yeast is sized to its OWN
+   * fermentation using the same model. Salt/oil/sugar always go in the final mix.
    */
   function computeRecipe(inp) {
     var ballWeight = Math.max(1, inp.ballWeight || 0);
@@ -140,48 +145,90 @@
     var oil = inp.oil || 0;
     var sugar = inp.sugar || 0;
 
-    var idyFraction = predictYeastPercentIDY({
+    var pf = (inp.prefermentType && inp.prefermentType !== "none")
+      ? DATA.PREFERMENTS[inp.prefermentType] : null;
+    var pfFrac = pf ? clamp(inp.prefFlourFraction || 0, 0, 0.95) : 0;
+
+    // Final-dough yeast: from the main room+cold ferment.
+    var finalIDY = predictYeastPercentIDY({
       roomHours: inp.roomHours, roomTempC: inp.roomTempC,
       coldHours: inp.coldHours, coldTempC: inp.coldTempC
     });
-    var hasYeast = idyFraction != null;
-    if (!hasYeast) idyFraction = 0;
+    // Preferment yeast: from the preferment's own (single-stage) ferment.
+    var prefIDY = pf ? predictYeastPercentIDY({
+      roomHours: inp.prefHours, roomTempC: inp.prefTempC, coldHours: 0
+    }) : null;
 
-    // Total = flour * (1 + hydration + salt + oil + sugar + idyFraction).
-    var denom = 1 + hydration + salt + oil + sugar + idyFraction;
+    var hasYeast = (finalIDY != null) || (prefIDY != null);
+    var finalIDYf = finalIDY || 0;
+    var prefIDYf = prefIDY || 0;
+
+    // Effective overall IDY fraction (flour-weighted) for backing out flour.
+    // This is independent of flour because pref/final flour are fractions of it.
+    var effIDY = pf ? (pfFrac * prefIDYf + (1 - pfFrac) * finalIDYf) : finalIDYf;
+
+    var denom = 1 + hydration + salt + oil + sugar + effIDY;
     var flour = totalDough / denom;
 
-    var idyGrams = flour * idyFraction;
-    var yeastGrams = convertYeast(idyGrams, inp.yeastType);
-
+    // Combined (whole-batch) amounts - these still sum to the total dough.
+    var idyGrams = flour * effIDY;
     var ingredients = {
       flour: flour,
       water: flour * hydration,
       salt: flour * salt,
-      yeast: yeastGrams,
+      yeast: convertYeast(idyGrams, inp.yeastType),
       oil: flour * oil,
       sugar: flour * sugar
     };
-
-    // Per-ball breakdown (same proportions, divided by count).
     var perBall = {};
-    Object.keys(ingredients).forEach(function (k) {
-      perBall[k] = ingredients[k] / ballCount;
-    });
+    Object.keys(ingredients).forEach(function (k) { perBall[k] = ingredients[k] / ballCount; });
 
-    return {
+    var out = {
       totalDough: totalDough,
       ballWeight: ballWeight,
       ballCount: ballCount,
-      percents: {
-        hydration: hydration, salt: salt, oil: oil, sugar: sugar,
-        yeastIDY: idyFraction
-      },
+      percents: { hydration: hydration, salt: salt, oil: oil, sugar: sugar, yeastIDY: effIDY },
       hasYeast: hasYeast,
-      idyGrams: idyGrams,        // always IDY-equivalent, for reference
-      total: ingredients,        // grams, whole batch
-      perBall: perBall           // grams, single ball
+      idyGrams: idyGrams,
+      total: ingredients,
+      perBall: perBall,
+      usesPreferment: !!pf
     };
+
+    if (pf) {
+      var pfFlour = flour * pfFrac;
+      var finalFlour = flour - pfFlour;
+      var pfWater = pfFlour * pf.hydration;
+      var totalWater = flour * hydration;
+      var finalWater = totalWater - pfWater;
+      var waterShortfall = finalWater < 0;
+      if (waterShortfall) finalWater = 0;
+
+      out.preferment = {
+        type: inp.prefermentType,
+        flourFraction: pfFrac,
+        hours: inp.prefHours,
+        tempC: inp.prefTempC,
+        idyPct: prefIDYf,
+        hasYeast: prefIDY != null,
+        flour: pfFlour,
+        water: pfWater,
+        yeast: convertYeast(pfFlour * prefIDYf, inp.yeastType)
+      };
+      out.finalDough = {
+        idyPct: finalIDYf,
+        hasYeast: finalIDY != null,
+        flour: finalFlour,
+        water: finalWater,
+        salt: flour * salt,
+        yeast: convertYeast(finalFlour * finalIDYf, inp.yeastType),
+        oil: flour * oil,
+        sugar: flour * sugar
+      };
+      out.waterShortfall = waterShortfall;
+    }
+
+    return out;
   }
 
   // ---- imperial / volume fallback -------------------------------------------

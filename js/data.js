@@ -127,6 +127,26 @@
   };
 
   /*
+   * PREFERMENTS - make-ahead flour+water+yeast cultures mixed into the dough.
+   * hydration = water as a fraction of the preferment's own flour
+   * (poolish = 100%, biga = ~50%). Salt/oil/sugar never go in the preferment.
+   */
+  var PREFERMENTS = {
+    none: { label: "None (straight dough)" },
+    poolish: {
+      label: "Poolish (liquid, 100%)", hydration: 1.0,
+      note: "Equal parts flour and water; pourable. Adds extensibility and a mild, nutty flavor."
+    },
+    biga: {
+      label: "Biga (stiff, ~50%)", hydration: 0.5,
+      note: "Stiff and shaggy; tear into the final mix. Adds strength and a deeper aroma."
+    }
+  };
+
+  // Default preferment plan (independent of pizza style; all editable).
+  var PREFERMENT_DEFAULTS = { flourPct: 0.30, hours: 12, tempC: 20 };
+
+  /*
    * YEAST PREDICTION GRID  -  IDY baker's % to reach a ripe dough.
    * Rows = total fermentation hours at a steady room temperature.
    * Cols = room temperature in C.
@@ -183,6 +203,8 @@
     STYLES: STYLES,
     FLOURS: FLOURS,
     YEAST: YEAST,
+    PREFERMENTS: PREFERMENTS,
+    PREFERMENT_DEFAULTS: PREFERMENT_DEFAULTS,
     YEAST_GRID: YEAST_GRID,
     Q10: Q10,
     CONVERSIONS: CONVERSIONS
